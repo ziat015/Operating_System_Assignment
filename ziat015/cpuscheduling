@@ -1,0 +1,59 @@
+#include <stdio.h>
+
+#define PROCESS_COUNT 3
+
+int completionTimes[PROCESS_COUNT];
+int turnaroundTimes[PROCESS_COUNT];
+int waitingTimes[PROCESS_COUNT];
+
+void calculateCompletionTimes(int burstTimes[], int arrivalTimes[]) {
+    int cumulativeTime = arrivalTimes[0];
+    for (int i = 0; i < PROCESS_COUNT; i++) {
+        cumulativeTime += burstTimes[i];
+        completionTimes[i] = cumulativeTime;
+    }
+    printf("Completion Times:");
+    for (int i = 0; i < PROCESS_COUNT; i++) {
+        printf("\n %d", completionTimes[i]);
+    }
+}
+
+void calculateTurnaroundTimes(int arrivalTimes[]) {
+    for (int i = 0; i < PROCESS_COUNT; i++) {
+        turnaroundTimes[i] = completionTimes[i] - arrivalTimes[i];
+    }
+    printf("\nTurnaround Times:");
+    for (int i = 0; i < PROCESS_COUNT; i++) {
+        printf("\n %d", turnaroundTimes[i]);
+    }
+}
+
+void calculateWaitingTimes(int burstTimes[]) {
+    for (int i = 0; i < PROCESS_COUNT; i++) {
+        waitingTimes[i] = turnaroundTimes[i] - burstTimes[i];
+    }
+    printf("\nWaiting Times:");
+    for (int i = 0; i < PROCESS_COUNT; i++) {
+        printf("\n %d", waitingTimes[i]);
+    }
+}
+
+void calculateAverageWaitingTime() {
+    int totalWaitingTime = 0;
+    for (int i = 0; i < PROCESS_COUNT; i++) {
+        totalWaitingTime += waitingTimes[i];
+    }
+    float averageWaitingTime = (float)totalWaitingTime / PROCESS_COUNT;
+    printf("\nAverage Waiting Time: %.2f\n", averageWaitingTime);
+}
+
+int main() {
+    int burstTimes[PROCESS_COUNT] = {2, 6, 3};
+    int arrivalTimes[PROCESS_COUNT] = {1, 2, 3};
+    calculateCompletionTimes(burstTimes, arrivalTimes);
+    calculateTurnaroundTimes(arrivalTimes);
+    calculateWaitingTimes(burstTimes);
+    calculateAverageWaitingTime();
+
+    return 0;
+}
